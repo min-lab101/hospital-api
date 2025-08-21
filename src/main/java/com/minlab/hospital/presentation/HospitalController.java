@@ -1,4 +1,4 @@
-package com.minlab.hospital;
+package com.minlab.hospital.presentation;
 
 import com.minlab.hospital.domain.entity.Hospital;
 import com.minlab.hospital.domain.repository.HospitalRepository;

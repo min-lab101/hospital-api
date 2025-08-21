@@ -3,6 +3,9 @@ package com.minlab.hospital.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor @Builder
@@ -20,5 +23,8 @@ public class Hospital {
 
     @Column(nullable = false, length = 10)
     private String doctorName;         // 병원장명
+
+    @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Patient> patients = new ArrayList<>();
 
 }
