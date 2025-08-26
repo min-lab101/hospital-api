@@ -1,4 +1,4 @@
-package com.minlab.hospital.presentation;
+package com.minlab.hospital.presentation.controller;
 
 import com.minlab.hospital.application.service.VisitService;
 import com.minlab.hospital.domain.entity.Visit;

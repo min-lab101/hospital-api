@@ -5,6 +5,7 @@ import com.minlab.hospital.application.service.VisitService;
 import com.minlab.hospital.domain.entity.Hospital;
 import com.minlab.hospital.domain.entity.Patient;
 import com.minlab.hospital.domain.entity.Visit;
+import com.minlab.hospital.presentation.controller.VisitController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "patient")
+@Table(name = "patient",
+        uniqueConstraints = { @UniqueConstraint(columnNames = {"hospital_id", "patient_number"}) })
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,7 +26,7 @@ public class Patient {
     @Column(nullable = false, length = 20)
     private String name; // 환자 이름
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20, name = "patient_number")
     private String patientNumber; // 환자등록번호 (병원별 unique)
 
     @Column(nullable = false, length = 10)
