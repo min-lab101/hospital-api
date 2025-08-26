@@ -1,12 +1,15 @@
 package com.minlab.hospital.domain.repository;
 
-
-import com.minlab.hospital.domain.entity.Patient;
 import com.minlab.hospital.domain.entity.QPatient;
-import com.minlab.hospital.presentation.dto.request.PatientSearchCondition;
+import com.minlab.hospital.domain.entity.QVisit;
+import com.minlab.hospital.presentation.dto.request.PatientSearchRequestDto;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -16,8 +19,9 @@ public class PatientRepositoryImpl implements PatientRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Patient> searchPatients(Long hospitalId, PatientSearchCondition condition) {
+    public Page<Tuple> searchPatients(Long hospitalId, PatientSearchRequestDto condition, Pageable pageable) {
         QPatient patient = QPatient.patient;
+        QVisit visit = QVisit.visit;
 
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(patient.hospital.id.eq(hospitalId));
@@ -32,9 +36,24 @@ public class PatientRepositoryImpl implements PatientRepositoryCustom {
             builder.and(patient.birthDate.stringValue().eq(condition.getBirthDate()));
         }
 
-        return queryFactory
-                .selectFrom(patient)
+        // 환자 + 최근 방문일
+        List<Tuple> tuples = queryFactory
+                .select(patient, visit.visitDate.max())
+                .from(patient)
+                .leftJoin(visit).on(visit.patient.eq(patient))
                 .where(builder)
+                .groupBy(patient.id)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        // 전체 개수
+        Long total = queryFactory
+                .select(patient.count())
+                .from(patient)
+                .where(builder)
+                .fetchOne();
+
+        return new PageImpl<>(tuples, pageable, total != null ? total : 0L);
     }
 }

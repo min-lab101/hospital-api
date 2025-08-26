@@ -1,11 +1,11 @@
 package com.minlab.hospital.presentation.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -21,6 +21,7 @@ public class  PatientRequestDto {
     private String gender;
 
     @Past(message = "생년월일은 과거 날짜여야 합니다.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
     @NotBlank(message = "전화번호는 필수입니다.")

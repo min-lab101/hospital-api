@@ -2,9 +2,14 @@ package com.minlab.hospital.presentation.controller;
 
 import com.minlab.hospital.application.service.PatientService;
 import com.minlab.hospital.presentation.dto.request.PatientRequestDto;
-import com.minlab.hospital.presentation.dto.request.PatientSearchCondition;
+import com.minlab.hospital.presentation.dto.request.PatientSearchRequestDto;
 import com.minlab.hospital.presentation.dto.response.PatientResponseDto;
+import com.minlab.hospital.presentation.dto.response.PatientSearchResponseDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +28,7 @@ public class PatientController {
     @PostMapping
     public ResponseEntity<PatientResponseDto> registerPatient(
             @PathVariable Long hospitalId,
-            @RequestBody PatientRequestDto requestDto
+            @Valid @RequestBody PatientRequestDto requestDto
             ) {
         return ResponseEntity.ok(patientService.registerPatient(hospitalId, requestDto));
     }
@@ -35,7 +40,7 @@ public class PatientController {
     public ResponseEntity<PatientResponseDto> updatePatient(
             @PathVariable Long hospitalId,
             @PathVariable Long patientId,
-            @RequestBody PatientRequestDto requestDto
+            @Valid @RequestBody PatientRequestDto requestDto
     ) {
         return ResponseEntity.ok(patientService.updatePatient(hospitalId, patientId, requestDto));
     }
@@ -77,9 +82,15 @@ public class PatientController {
      * 환자 목록 조회 (조건)
      */
     @GetMapping("/search")
-    public List<PatientResponseDto> searchPatients(
+    public ResponseEntity<Page<PatientSearchResponseDto>> searchPatients(
             @PathVariable Long hospitalId,
-            PatientSearchCondition condition) {
-        return patientService.searchPatients(hospitalId, condition);
+            @Valid PatientSearchRequestDto condition) {
+        int pageNo = (condition.getPageNo() == null || condition.getPageNo() < 1) ? 0 : condition.getPageNo() - 1;
+        int pageSize = (condition.getPageSize() == null || condition.getPageSize() < 1) ? 10 : condition.getPageSize();
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<PatientSearchResponseDto> page = patientService.searchPatients(hospitalId, condition, pageable);
+
+        return ResponseEntity.ok(page);
     }
 }

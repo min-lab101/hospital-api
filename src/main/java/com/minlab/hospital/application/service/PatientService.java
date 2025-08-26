@@ -2,16 +2,23 @@ package com.minlab.hospital.application.service;
 
 import com.minlab.hospital.domain.entity.Hospital;
 import com.minlab.hospital.domain.entity.Patient;
+import com.minlab.hospital.domain.entity.QPatient;
+import com.minlab.hospital.domain.entity.QVisit;
 import com.minlab.hospital.domain.repository.HospitalRepository;
 import com.minlab.hospital.domain.repository.PatientRepository;
 import com.minlab.hospital.presentation.dto.request.PatientRequestDto;
-import com.minlab.hospital.presentation.dto.request.PatientSearchCondition;
+import com.minlab.hospital.presentation.dto.request.PatientSearchRequestDto;
 import com.minlab.hospital.presentation.dto.response.PatientResponseDto;
+import com.minlab.hospital.presentation.dto.response.PatientSearchResponseDto;
+import com.querydsl.core.Tuple;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -103,18 +110,20 @@ public class PatientService {
     }
 
     /**
-     * 환자 목록 조회 (조건)
+     * 환자 목록 조회 (조건 + 페이징)
      */
-    public List<PatientResponseDto> searchPatients(Long hospitalId, PatientSearchCondition condition) {
-        // 병원 존재 여부 확인
+    public Page<PatientSearchResponseDto> searchPatients(Long hospitalId, PatientSearchRequestDto condition, Pageable pageable) {
         if (!hospitalRepository.existsById(hospitalId)) {
             throw new EntityNotFoundException("해당 병원을 찾을 수 없습니다.");
         }
 
-        return patientRepository.searchPatients(hospitalId, condition)
-                .stream()
-                .map(PatientResponseDto::fromEntity)
-                .toList();
+        Page<Tuple> page = patientRepository.searchPatients(hospitalId, condition, pageable);
+
+        return page.map(tuple -> {
+            Patient patient = tuple.get(QPatient.patient);
+            LocalDateTime recentVisitDate = tuple.get(QVisit.visit.visitDate.max());
+            return PatientSearchResponseDto.fromEntity(patient, recentVisitDate);
+        });
     }
 
 }

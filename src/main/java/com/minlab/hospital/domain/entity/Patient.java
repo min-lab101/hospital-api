@@ -2,6 +2,7 @@ package com.minlab.hospital.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class Patient {
     private String gender; // 성별
 
     @Column(nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate; // 생년월일
 
     @Column(length = 15)
