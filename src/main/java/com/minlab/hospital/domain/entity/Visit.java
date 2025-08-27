@@ -38,14 +38,20 @@ public class Visit {
     private LocalDateTime visitDate;
 
     /**
-     * 접수 상태 코드 (예: 방문중, 종료, 취소)
+     * 방문 상태 (예: 방문중, 종료, 취소)
      */
     @Column(length = 20, nullable = false)
     private String visitStatus;
 
     /**
-     * 진료 유형 (외래, 입원, 응급)
+     * 진료 유형 (예: 약처방, 검사)
      */
     @Column(length = 20, nullable = false)
     private String visitType;
+
+    /**
+     * 진료 과목 (예: 내과, 안과)
+     */
+    @Column(length = 20, nullable = false)
+    private String visitCategory;
 }

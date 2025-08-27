@@ -1,7 +1,9 @@
 package com.minlab.hospital.presentation.controller;
 
 import com.minlab.hospital.application.service.VisitService;
-import com.minlab.hospital.domain.entity.Visit;
+import com.minlab.hospital.presentation.dto.request.VisitRequestDto;
+import com.minlab.hospital.presentation.dto.response.VisitResponseDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/visits")
+@RequestMapping("/api/patients/{patientId}/visits")
 @RequiredArgsConstructor
 public class VisitController {
 
@@ -18,64 +20,56 @@ public class VisitController {
     /**
      * 방문 등록
      */
-    @PostMapping("/hospital/{hospitalId}/patient/{patientId}")
-    public ResponseEntity<Visit> registerVisit(
-            @PathVariable Long hospitalId,
+    @PostMapping
+    public ResponseEntity<VisitResponseDto> registerVisit(
             @PathVariable Long patientId,
-            @RequestBody Visit visit
+            @Valid @RequestBody VisitRequestDto requestDto
     ) {
-        return ResponseEntity.ok(visitService.registerVisit(hospitalId, patientId, visit));
+        return ResponseEntity.ok(visitService.registerVisit(patientId, requestDto));
     }
 
     /**
      * 방문 수정
      */
     @PutMapping("/{visitId}")
-    public ResponseEntity<Visit> updateVisit(
+    public ResponseEntity<VisitResponseDto> updateVisit(
+            @PathVariable Long patientId,
             @PathVariable Long visitId,
-            @RequestBody Visit updateInfo
+            @Valid @RequestBody VisitRequestDto requestDto
     ) {
-        return ResponseEntity.ok(visitService.updateVisit(visitId, updateInfo));
+        return ResponseEntity.ok(visitService.updateVisit(visitId, requestDto));
     }
 
     /**
      * 방문 삭제
      */
     @DeleteMapping("/{visitId}")
-    public ResponseEntity<Void> deleteVisit(@PathVariable Long visitId) {
+    public ResponseEntity<Void> deleteVisit(
+            @PathVariable Long patientId,
+            @PathVariable Long visitId
+    ) {
         visitService.deleteVisit(visitId);
         return ResponseEntity.noContent().build();
     }
 
     /**
-     * 방문 조회 (단건)
+     * 방문 단건 조회
      */
     @GetMapping("/{visitId}")
-    public ResponseEntity<Visit> getVisit(@PathVariable Long visitId) {
+    public ResponseEntity<VisitResponseDto> getVisit(
+            @PathVariable Long patientId,
+            @PathVariable Long visitId
+    ) {
         return ResponseEntity.ok(visitService.getVisit(visitId));
     }
 
     /**
-     * 방문 전체 조회
+     * 환자별 방문 전체 조회
      */
     @GetMapping
-    public ResponseEntity<List<Visit>> getAllVisits() {
-        return ResponseEntity.ok(visitService.getAllVisits());
-    }
-
-    /**
-     * 특정 환자의 방문 기록 조회
-     */
-    @GetMapping("/patient/{patientId}")
-    public ResponseEntity<List<Visit>> getVisitsByPatient(@PathVariable Long patientId) {
+    public ResponseEntity<List<VisitResponseDto>> getAllVisitsByPatient(
+            @PathVariable Long patientId
+    ) {
         return ResponseEntity.ok(visitService.getVisitsByPatient(patientId));
-    }
-
-    /**
-     * 특정 병원의 방문 기록 조회
-     */
-    @GetMapping("/hospital/{hospitalId}")
-    public ResponseEntity<List<Visit>> getVisitsByHospital(@PathVariable Long hospitalId) {
-        return ResponseEntity.ok(visitService.getVisitsByHospital(hospitalId));
     }
 }

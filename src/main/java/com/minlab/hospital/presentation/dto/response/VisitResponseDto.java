@@ -6,6 +6,9 @@ import java.time.LocalDateTime;
 
 public record VisitResponseDto(
         Long id,
+        Long hospitalId,
+        Long patientId,
+        String patientNumber,
         LocalDateTime visitDate,
         String visitStatus,
         String visitType
@@ -13,6 +16,9 @@ public record VisitResponseDto(
     public static VisitResponseDto fromEntity(Visit visit) {
         return new VisitResponseDto(
                 visit.getId(),
+                visit.getHospital().getId(),
+                visit.getPatient().getId(),
+                visit.getPatient().getPatientNumber(),
                 visit.getVisitDate(),
                 visit.getVisitStatus(),
                 visit.getVisitType()
