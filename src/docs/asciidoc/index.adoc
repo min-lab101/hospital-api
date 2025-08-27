@@ -28,6 +28,80 @@ Hospital API는 환자 정보를 관리하는 RESTful API입니다.
 }
 ----
 
+
+== 병원 API
+
+=== 병원 등록
+병원을 등록합니다.
+
+.요청
+include::{snippets}/hospital-register-success/http-request.adoc[]
+
+.요청 필드
+include::{snippets}/hospital-register-success/request-fields.adoc[]
+
+.응답
+include::{snippets}/hospital-register-success/http-response.adoc[]
+
+.응답 필드
+include::{snippets}/hospital-register-success/response-fields.adoc[]
+
+.실패 응답
+include::{snippets}/hospital-register-fail/http-response.adoc[]
+
+=== 병원 수정
+
+.요청
+include::{snippets}/hospital-update-success/http-request.adoc[]
+
+.요청 필드
+include::{snippets}/hospital-update-success/request-fields.adoc[]
+
+.응답
+include::{snippets}/hospital-update-success/http-response.adoc[]
+
+.응답 필드
+include::{snippets}/hospital-update-success/response-fields.adoc[]
+
+.실패 응답
+include::{snippets}/hospital-update-fail/http-response.adoc[]
+
+=== 병원 삭제
+
+.요청
+include::{snippets}/hospital-delete-success/http-request.adoc[]
+
+.응답
+include::{snippets}/hospital-delete-success/http-response.adoc[]
+
+.실패 응답
+include::{snippets}/hospital-delete-fail/http-response.adoc[]
+
+=== 병원 단건 조회
+
+.요청
+include::{snippets}/hospital-get-success/http-request.adoc[]
+
+.응답
+include::{snippets}/hospital-get-success/http-response.adoc[]
+
+.응답 필드
+include::{snippets}/hospital-get-success/response-fields.adoc[]
+
+.실패 응답
+include::{snippets}/hospital-get-fail/http-response.adoc[]
+
+=== 병원 전체 조회
+
+.요청
+include::{snippets}/hospital-get-all-success/http-request.adoc[]
+
+.응답
+include::{snippets}/hospital-get-all-success/http-response.adoc[]
+
+.응답 필드
+include::{snippets}/hospital-get-all-success/response-fields.adoc[]
+
 == 환자 API
 
 === 환자 등록
