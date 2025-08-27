@@ -117,3 +117,83 @@ include::{snippets}/patient-search-success/response-fields.adoc[]
 
 .실패 응답
 include::{snippets}/patient-search-fail/http-response.adoc[]
+
+== 방문 API
+
+=== 방문 등록
+환자의 방문 정보를 등록합니다.
+
+.요청
+include::{snippets}/visit-register-success/http-request.adoc[]
+
+.요청 필드
+include::{snippets}/visit-register-success/request-fields.adoc[]
+
+.응답
+include::{snippets}/visit-register-success/http-response.adoc[]
+
+.응답 필드
+include::{snippets}/visit-register-success/response-fields.adoc[]
+
+.실패 응답
+include::{snippets}/visit-register-fail/http-response.adoc[]
+
+=== 방문 수정
+환자의 방문 정보를 수정합니다.
+
+.요청
+include::{snippets}/visit-update-success/http-request.adoc[]
+
+.요청 필드
+include::{snippets}/visit-update-success/request-fields.adoc[]
+
+.응답
+include::{snippets}/visit-update-success/http-response.adoc[]
+
+.응답 필드
+include::{snippets}/visit-update-success/response-fields.adoc[]
+
+.실패 응답
+include::{snippets}/visit-update-fail/http-response.adoc[]
+
+=== 방문 삭제
+환자의 방문 정보를 삭제합니다.
+
+.요청
+include::{snippets}/visit-delete-success/http-request.adoc[]
+
+.응답
+include::{snippets}/visit-delete-success/http-response.adoc[]
+
+.실패 응답
+include::{snippets}/visit-delete-fail/http-response.adoc[]
+
+=== 방문 단건 조회
+환자의 특정 방문 정보를 조회합니다.
+
+.요청
+include::{snippets}/visit-get-success/http-request.adoc[]
+
+.응답
+include::{snippets}/visit-get-success/http-response.adoc[]
+
+.응답 필드
+include::{snippets}/visit-get-success/response-fields.adoc[]
+
+.실패 응답
+include::{snippets}/visit-get-fail/http-response.adoc[]
+
+=== 환자별 방문 전체 조회
+특정 환자의 모든 방문 정보를 조회합니다.
+
+.요청
+include::{snippets}/visit-get-all-success/http-request.adoc[]
+
+.응답
+include::{snippets}/visit-get-all-success/http-response.adoc[]
+
+.응답 필드
+include::{snippets}/visit-get-all-success/response-fields.adoc[]
+
+.실패 응답
+include::{snippets}/visit-get-all-fail/http-response.adoc[]
