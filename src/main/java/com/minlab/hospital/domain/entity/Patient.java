@@ -12,12 +12,13 @@ import java.util.List;
 @Table(name = "patient",
         uniqueConstraints = { @UniqueConstraint(columnNames = {"hospital_id", "seq"}) })
 @Getter @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@NoArgsConstructor @AllArgsConstructor @Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Patient {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -46,7 +47,7 @@ public class Patient {
     @Column(nullable = false)
     private Long seq; // 병원별 순번, 무제한 증가
 
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "patient")
     private List<Visit> visits = new ArrayList<>();
 
 }

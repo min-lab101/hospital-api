@@ -10,9 +10,11 @@ import java.util.List;
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor @Builder
 @Table(name = "hospital")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Hospital {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(nullable = false, length = 45)
@@ -23,11 +25,5 @@ public class Hospital {
 
     @Column(nullable = false, length = 10)
     private String doctorName;         // 병원장명
-
-    @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Patient> patients = new ArrayList<>();
-
-    @OneToMany(mappedBy = "hospital", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Visit> visits = new ArrayList<>();
 
 }
