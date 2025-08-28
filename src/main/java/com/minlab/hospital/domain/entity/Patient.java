@@ -50,4 +50,15 @@ public class Patient {
     @OneToMany(mappedBy = "patient")
     private List<Visit> visits = new ArrayList<>();
 
+    @Column(nullable = false, length = 1)
+    private char status = 'A'; // 'A': active, 'D': deleted
+
+    public void softDelete() {
+        this.status = 'D';
+    }
+
+    public boolean isActive() {
+        return this.status == 'A';
+    }
+
 }

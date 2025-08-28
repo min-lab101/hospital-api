@@ -66,7 +66,7 @@ public class PatientService {
      */
     @Transactional
     public PatientResponseDto updatePatient(Long hospitalId, Long patientId, PatientRequestDto requestDto) {
-        Patient patient = patientRepository.findByHospital_IdAndId(hospitalId, patientId)
+        Patient patient = patientRepository.findByHospital_IdAndIdAndStatus(hospitalId, patientId, 'A')
                 .orElseThrow(() -> new EntityNotFoundException("해당 병원에서 환자를 찾을 수 없습니다."));
 
         // 환자등록번호는 변경 불가 (비즈니스 규칙)
@@ -84,17 +84,17 @@ public class PatientService {
      */
     @Transactional
     public void deletePatient(Long hospitalId, Long patientId) {
-        Patient patient = patientRepository.findByHospital_IdAndId(hospitalId, patientId)
+        Patient patient = patientRepository.findByHospital_IdAndIdAndStatus(hospitalId, patientId, 'A')
                 .orElseThrow(() -> new EntityNotFoundException("해당 병원에서 환자를 찾을 수 없습니다."));
 
-        patientRepository.delete(patient);
+        patient.softDelete();
     }
 
     /**
      * 환자 단건 조회
      */
     public PatientResponseDto getPatient(Long hospitalId, Long patientId) {
-        Patient patient = patientRepository.findByHospital_IdAndId(hospitalId, patientId)
+        Patient patient = patientRepository.findByHospital_IdAndIdAndStatus(hospitalId, patientId, 'A')
                 .orElseThrow(() -> new EntityNotFoundException("해당 병원에서 환자를 찾을 수 없습니다."));
 
         return PatientResponseDto.fromEntity(patient);
@@ -109,7 +109,7 @@ public class PatientService {
             throw new EntityNotFoundException("해당 병원을 찾을 수 없습니다.");
         }
 
-        return patientRepository.findByHospital_Id(hospitalId)
+        return patientRepository.findByHospital_IdAndStatus(hospitalId, 'A')
                 .stream()
                 .map(PatientResponseDto::fromEntity)
                 .collect(Collectors.toList());
