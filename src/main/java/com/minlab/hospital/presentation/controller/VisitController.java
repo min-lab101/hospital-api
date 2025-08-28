@@ -5,6 +5,9 @@ import com.minlab.hospital.presentation.dto.request.VisitRequestDto;
 import com.minlab.hospital.presentation.dto.response.VisitResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,9 +70,10 @@ public class VisitController {
      * 환자별 방문 전체 조회
      */
     @GetMapping
-    public ResponseEntity<List<VisitResponseDto>> getAllVisitsByPatient(
-            @PathVariable Long patientId
+    public ResponseEntity<Page<VisitResponseDto>> getAllVisitsByPatient(
+            @PathVariable Long patientId,
+            @PageableDefault(page = 0, size = 10) Pageable pageable
     ) {
-        return ResponseEntity.ok(visitService.getVisitsByPatient(patientId));
+        return ResponseEntity.ok(visitService.getVisitsByPatient(patientId, pageable));
     }
 }

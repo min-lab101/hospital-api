@@ -8,6 +8,8 @@ import com.minlab.hospital.presentation.dto.request.VisitRequestDto;
 import com.minlab.hospital.presentation.dto.response.VisitResponseDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -81,14 +83,13 @@ public class VisitService {
     /**
      * 특정 환자 방문 전체 조회
      */
-    public List<VisitResponseDto> getVisitsByPatient(Long patientId) {
+    public Page<VisitResponseDto> getVisitsByPatient(Long patientId, Pageable pageable) {
         if (!patientRepository.existsById(patientId)) {
             throw new EntityNotFoundException("해당 환자를 찾을 수 없습니다.");
         }
 
-        return visitRepository.findByPatient_Id(patientId)
-                .stream()
-                .map(VisitResponseDto::fromEntity)
-                .collect(Collectors.toList());
+        Page<Visit> visitPage = visitRepository.findByPatient_Id(patientId, pageable);
+
+        return visitPage.map(VisitResponseDto::fromEntity);
     }
 }
