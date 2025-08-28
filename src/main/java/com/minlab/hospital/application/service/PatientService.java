@@ -38,13 +38,18 @@ public class PatientService {
         Hospital hospital = hospitalRepository.findById(hospitalId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 병원을 찾을 수 없습니다."));
 
-        // 병원별 가장 큰 등록번호 조회 후 +1
-        String maxNumber = patientRepository.findMaxPatientNumberByHospital(hospitalId);
-        String nextNumber = (maxNumber == null) ? "1" : String.valueOf(Integer.parseInt(maxNumber) + 1);
+        // 병원별 max seq 조회
+        Long maxSeq = patientRepository.findMaxSeqByHospitalForUpdate(hospitalId);
+        long nextSeq = maxSeq + 1;
+
+        // 환자 번호 생성: 병원ID 3자리 + "-" + seq (무제한 증가)
+        String hospitalCode = String.format("%03d", hospitalId);
+        String patientNumber = String.format("%s-%d", hospitalCode, nextSeq);
 
         Patient patient = Patient.builder()
                 .hospital(hospital)
-                .patientNumber(nextNumber)
+                .seq(nextSeq)
+                .patientNumber(patientNumber)
                 .name(requestDto.getName())
                 .gender(requestDto.getGender())
                 .birthDate(requestDto.getBirthDate())

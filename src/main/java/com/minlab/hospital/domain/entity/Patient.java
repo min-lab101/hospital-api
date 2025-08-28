@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "patient",
-        uniqueConstraints = { @UniqueConstraint(columnNames = {"hospital_id", "patient_number"}) })
+        uniqueConstraints = { @UniqueConstraint(columnNames = {"hospital_id", "seq"}) })
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -42,6 +42,9 @@ public class Patient {
 
     @Column(length = 100)
     private String address; // 주소
+
+    @Column(nullable = false)
+    private Long seq; // 병원별 순번, 무제한 증가
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Visit> visits = new ArrayList<>();
