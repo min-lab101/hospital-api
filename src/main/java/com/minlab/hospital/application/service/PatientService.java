@@ -6,6 +6,7 @@ import com.minlab.hospital.domain.entity.QPatient;
 import com.minlab.hospital.domain.entity.QVisit;
 import com.minlab.hospital.domain.repository.HospitalRepository;
 import com.minlab.hospital.domain.repository.PatientRepository;
+import com.minlab.hospital.domain.service.PatientNumberGenerator;
 import com.minlab.hospital.presentation.dto.request.PatientRequestDto;
 import com.minlab.hospital.presentation.dto.request.PatientSearchRequestDto;
 import com.minlab.hospital.presentation.dto.response.PatientResponseDto;
@@ -29,6 +30,7 @@ public class PatientService {
 
     private final PatientRepository patientRepository;
     private final HospitalRepository hospitalRepository;
+    private final PatientNumberGenerator generator;
 
     /**
      * 환자 등록
@@ -40,11 +42,10 @@ public class PatientService {
 
         // 병원별 max seq 조회
         Long maxSeq = patientRepository.findMaxSeqByHospitalForUpdate(hospitalId);
-        long nextSeq = maxSeq + 1;
+        long nextSeq = (maxSeq == null ? 1: maxSeq + 1);
 
-        // 환자 번호 생성: 병원ID 3자리 + "-" + seq (무제한 증가)
-        String hospitalCode = String.format("%03d", hospitalId);
-        String patientNumber = String.format("%s-%d", hospitalCode, nextSeq);
+        // 환자 번호 생성
+        String patientNumber = generator.generate(hospitalId, nextSeq);
 
         Patient patient = Patient.builder()
                 .hospital(hospital)

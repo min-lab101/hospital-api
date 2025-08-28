@@ -85,10 +85,8 @@ public class PatientController {
     public ResponseEntity<Page<PatientSearchResponseDto>> searchPatients(
             @PathVariable Long hospitalId,
             @Valid PatientSearchRequestDto condition) {
-        int pageNo = (condition.getPageNo() == null || condition.getPageNo() < 1) ? 0 : condition.getPageNo() - 1;
-        int pageSize = (condition.getPageSize() == null || condition.getPageSize() < 1) ? 10 : condition.getPageSize();
 
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = PageRequest.of(condition.getPageNo() - 1, condition.getPageSize());
         Page<PatientSearchResponseDto> page = patientService.searchPatients(hospitalId, condition, pageable);
 
         return ResponseEntity.ok(page);
